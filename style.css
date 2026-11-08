@@ -1,0 +1,928 @@
+/* ==========================================================================
+   DND — J'AI CHANGÉ ? | EXPÉRIENCE DU MIROIR EMBUÉ
+   ========================================================================== */
+
+:root {
+  --bg-dark: #08090c;
+  --bg-room: #0e1017;
+  --mirror-bg: #11141c;
+  --accent-blue: #5ba4e5;
+  --postit-blue: #6ec1f7;
+  --postit-text: #102a45;
+  --tape-color: rgba(255, 255, 255, 0.45);
+  --font-main: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-hand: 'Caveat', cursive;
+  --font-marker: 'Permanent Marker', cursive;
+  --font-postit: 'Gloria Hallelujah', cursive;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  font-family: var(--font-main);
+  color: #ffffff;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ==========================================================================
+   AMBIANCE & MOODY LIGHTING (Atmosphère sombre et intimiste)
+   ========================================================================== */
+
+.room-ambient {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Subtle tile grid in the dark bathroom/backstage */
+.room-ambient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.6;
+}
+
+/* Dim overhead spotlight shining on the mirror */
+.spotlight {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90vw;
+  max-width: 900px;
+  height: 90vh;
+  background: radial-gradient(ellipse at 50% 25%, rgba(140, 165, 210, 0.16) 0%, rgba(30, 35, 50, 0.05) 50%, transparent 80%);
+  filter: blur(40px);
+}
+
+/* Subtle neon moody reflection */
+.neon-reflection {
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(90, 130, 220, 0.07) 0%, transparent 70%);
+  filter: blur(50px);
+}
+
+/* Cinematic Dark Vignette */
+.vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.92);
+}
+
+/* ==========================================================================
+   SCENE & MIRROR CONTAINER
+   ========================================================================== */
+
+.scene-container {
+  position: relative;
+  z-index: 2;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* The physical mirror frame */
+.mirror-frame {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  height: 94vh;
+  max-height: 860px;
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--mirror-bg);
+  box-shadow: 
+    0 25px 60px -10px rgba(0, 0, 0, 0.9),
+    0 10px 30px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Delicate LED / rim glow along the mirror contour */
+.mirror-rim-light {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  pointer-events: none;
+  box-shadow: 
+    inset 0 0 35px rgba(100, 150, 255, 0.08),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  z-index: 5;
+}
+
+/* ==========================================================================
+   LAYER 1: BEHIND THE STEAM (Mirror reflection & Pre-save reveal)
+   ========================================================================== */
+
+.mirror-reflection-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: 
+    radial-gradient(ellipse at 50% 35%, #181d28 0%, #0d1017 60%, #08090e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 30px 24px;
+  overflow: hidden;
+}
+
+/* Silhouette of a person looking into the mirror in low light */
+.mirror-depth-shadow {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  height: 520px;
+  background: radial-gradient(ellipse at 50% 40%, rgba(30, 36, 50, 0.45) 0%, rgba(15, 18, 25, 0.7) 50%, transparent 85%);
+  border-radius: 50% 50% 30% 30%;
+  filter: blur(35px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Inner content revealed by clearing the steam */
+.single-reveal-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 380px;
+}
+
+.artist-badge {
+  font-family: var(--font-marker);
+  font-size: 1.4rem;
+  letter-spacing: 4px;
+  color: #a8b8d8;
+  text-shadow: 0 0 12px rgba(168, 184, 216, 0.3);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.single-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #ffffff 0%, #d8e2ff 40%, #8ca4d8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 14px rgba(140, 164, 216, 0.35));
+  margin-bottom: 10px;
+}
+
+.single-subtitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 24px;
+}
+
+/* Subtle audio wave bars */
+.audio-visualizer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  margin-bottom: 28px;
+}
+
+.audio-visualizer span {
+  width: 3px;
+  background: linear-gradient(to top, rgba(91, 164, 229, 0.4), #72b9f8);
+  border-radius: 4px;
+  animation: wavePulse 1.4s ease-in-out infinite alternate;
+}
+
+.audio-visualizer span:nth-child(1) { height: 8px; animation-delay: 0.1s; }
+.audio-visualizer span:nth-child(2) { height: 16px; animation-delay: 0.3s; }
+.audio-visualizer span:nth-child(3) { height: 24px; animation-delay: 0.2s; }
+.audio-visualizer span:nth-child(4) { height: 12px; animation-delay: 0.5s; }
+.audio-visualizer span:nth-child(5) { height: 20px; animation-delay: 0.4s; }
+.audio-visualizer span:nth-child(6) { height: 28px; animation-delay: 0.15s; }
+.audio-visualizer span:nth-child(7) { height: 14px; animation-delay: 0.35s; }
+.audio-visualizer span:nth-child(8) { height: 22px; animation-delay: 0.25s; }
+.audio-visualizer span:nth-child(9) { height: 15px; animation-delay: 0.45s; }
+.audio-visualizer span:nth-child(10) { height: 9px; animation-delay: 0.6s; }
+
+@keyframes wavePulse {
+  0% { transform: scaleY(0.4); opacity: 0.4; }
+  100% { transform: scaleY(1.1); opacity: 1; }
+}
+
+/* Pre-save Button */
+.presave-action-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.presave-main-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 32px;
+  background: linear-gradient(135deg, #2b6cb0 0%, #1e4e82 100%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50px;
+  color: #ffffff;
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  box-shadow: 
+    0 10px 25px -4px rgba(43, 108, 176, 0.5),
+    0 0 20px rgba(91, 164, 229, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.presave-main-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 65%
+  );
+  transform: rotate(25deg);
+  animation: shineGleam 4s infinite;
+}
+
+@keyframes shineGleam {
+  0% { transform: translateX(-100%) rotate(25deg); }
+  35%, 100% { transform: translateX(100%) rotate(25deg); }
+}
+
+.presave-main-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 
+    0 14px 30px -4px rgba(43, 108, 176, 0.65),
+    0 0 28px rgba(91, 164, 229, 0.5);
+}
+
+.presave-main-btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.presave-hint {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   LAYER 2: INTERACTIVE FOG CANVAS (Toile embuée)
+   ========================================================================== */
+
+.fog-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  cursor: pointer;
+  touch-action: none; /* Prevents scroll while wiping on mobile */
+}
+
+/* Edge condensation droplets (decorative) */
+.water-drips-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.15) 1px, transparent 2px),
+    radial-gradient(circle at 90% 15%, rgba(255, 255, 255, 0.12) 1.5px, transparent 2.5px),
+    radial-gradient(circle at 85% 80%, rgba(255, 255, 255, 0.14) 1px, transparent 2px),
+    radial-gradient(circle at 15% 75%, rgba(255, 255, 255, 0.15) 1.5px, transparent 3px);
+  background-size: 160px 180px;
+  opacity: 0.45;
+}
+
+/* ==========================================================================
+   LAYER 3: DECORATIONS (Polaroids, Sticker & Blue Post-It)
+   ========================================================================== */
+
+.mirror-decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none; /* Allows drawing underneath decorations */
+  z-index: 4;
+}
+
+/* --- POLAROIDS --- */
+.polaroid {
+  position: absolute;
+  background: #fdfbf7;
+  padding: 9px 9px 24px 9px;
+  border-radius: 3px;
+  box-shadow: 
+    0 12px 28px rgba(0, 0, 0, 0.7),
+    0 4px 10px rgba(0, 0, 0, 0.5),
+    inset 0 0 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.polaroid:active {
+  cursor: grabbing;
+}
+
+.polaroid-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.polaroid-photo-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #111;
+  border-radius: 2px;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+.polaroid-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: contrast(1.05) saturate(1.05);
+}
+
+.polaroid-caption {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  color: #2b2b2b;
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+/* Polaroid 1 (Top Left) */
+.polaroid-1 {
+  top: 24px;
+  left: 20px;
+  width: 130px;
+  transform: rotate(-6deg);
+}
+
+.polaroid-1 .duo-left {
+  object-position: 20% center;
+}
+
+.polaroid-1:hover {
+  transform: rotate(-3deg) scale(1.06);
+  z-index: 10;
+}
+
+/* Polaroid 2 (Bottom Right / Side) */
+.polaroid-2 {
+  bottom: 95px;
+  right: 18px;
+  width: 125px;
+  transform: rotate(5deg);
+}
+
+.polaroid-2 .duo-right {
+  object-position: 80% center;
+}
+
+.polaroid-2:hover {
+  transform: rotate(2deg) scale(1.06);
+  z-index: 10;
+}
+
+/* Realistic Frosted Tape */
+.tape-strip {
+  position: absolute;
+  background: var(--tape-color);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 5;
+}
+
+.top-tape {
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1deg);
+  width: 48px;
+  height: 16px;
+  opacity: 0.75;
+}
+
+.diagonal-tape {
+  top: -10px;
+  right: -8px;
+  transform: rotate(35deg);
+  width: 44px;
+  height: 15px;
+  opacity: 0.7;
+}
+
+/* --- HANDWRITTEN STICKER "dnd" (Top Right) --- */
+.sticker-dnd {
+  position: absolute;
+  top: 28px;
+  right: 24px;
+  transform: rotate(8deg);
+  pointer-events: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.sticker-dnd:hover {
+  transform: rotate(4deg) scale(1.08);
+}
+
+.sticker-cutout {
+  background: #fbfbfb;
+  color: #0b0c10;
+  padding: 6px 16px;
+  border-radius: 8px;
+  box-shadow: 
+    0 8px 18px rgba(0, 0, 0, 0.65),
+    0 2px 4px rgba(0, 0, 0, 0.35);
+  border: 2px solid #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle gloss reflection on the vinyl sticker */
+.sticker-cutout::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
+  pointer-events: none;
+}
+
+.sticker-text {
+  font-family: var(--font-marker);
+  font-size: 1.6rem;
+  letter-spacing: 2px;
+  display: block;
+  text-transform: lowercase;
+  line-height: 1;
+}
+
+/* --- BLUE POST-IT NOTE --- */
+.postit-blue {
+  position: absolute;
+  bottom: 35px;
+  left: 20px;
+  width: 175px;
+  background: linear-gradient(135deg, #74c7fd 0%, #54aee9 100%);
+  color: var(--postit-text);
+  padding: 16px 14px 18px 14px;
+  border-radius: 2px 2px 14px 2px;
+  box-shadow: 
+    0 12px 26px rgba(0, 0, 0, 0.65),
+    0 4px 10px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+  transform: rotate(-3deg);
+  pointer-events: auto;
+  cursor: default;
+  transition: transform 0.3s ease;
+}
+
+.postit-blue:hover {
+  transform: rotate(-1deg) scale(1.04);
+  z-index: 10;
+}
+
+/* Realistic adhesive strip at top */
+.postit-pin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
+}
+
+.postit-text {
+  font-family: var(--font-postit);
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: #0d2844;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+  letter-spacing: -0.2px;
+}
+
+/* ==========================================================================
+   LAYER 4: WIPE INVITATION PROMPT
+   ========================================================================== */
+
+.wipe-prompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  z-index: 3;
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.wipe-prompt.hidden {
+  opacity: 0;
+  transform: translate(-50%, -45%) scale(0.92);
+}
+
+.hand-icon-wrapper {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.hand-swipe-svg {
+  color: #ffffff;
+  animation: handSwipe 2.2s ease-in-out infinite;
+}
+
+@keyframes handSwipe {
+  0%, 100% {
+    transform: translate(-6px, 4px) rotate(-10deg);
+  }
+  50% {
+    transform: translate(8px, -6px) rotate(8deg);
+  }
+}
+
+.ripple-wave {
+  position: absolute;
+  inset: -6px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  animation: ripplePulse 2.2s infinite;
+}
+
+@keyframes ripplePulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.wipe-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  background: rgba(10, 14, 22, 0.55);
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+}
+
+/* ==========================================================================
+   FLOATING ACTION BUTTONS (Sound, Re-fog, Reveal)
+   ========================================================================== */
+
+.floating-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
+}
+
+.tool-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(18, 22, 32, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #d0d6e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  transition: all 0.25s ease;
+}
+
+.tool-btn:hover {
+  background: rgba(40, 50, 75, 0.9);
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+.tool-btn:active {
+  transform: scale(0.94);
+}
+
+.tool-btn.muted {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================================================
+   PRE-SAVE MODAL
+   ========================================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 5, 8, 0.85);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.35s ease;
+}
+
+.modal-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: linear-gradient(160deg, #171b26 0%, #0e111a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  padding: 28px 24px 20px 24px;
+  box-shadow: 
+    0 30px 70px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.modal-backdrop.active .modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #ffffff;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.modal-cover-thumb {
+  width: 68px;
+  height: 68px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.modal-cover-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent-blue);
+  text-transform: uppercase;
+}
+
+.modal-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin: 2px 0;
+  color: #ffffff;
+}
+
+.modal-artist {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+}
+
+.modal-desc {
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+.platform-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.platform-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.platform-item:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateX(3px);
+}
+
+.platform-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.btn-action {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transition: background 0.2s;
+}
+
+.platform-item:hover .btn-action {
+  background: var(--accent-blue);
+  color: #ffffff;
+}
+
+.modal-footer {
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN (Mobile First / Petits Écrans)
+   ========================================================================== */
+
+@media (max-width: 480px) {
+  .scene-container {
+    padding: 8px;
+  }
+
+  .mirror-frame {
+    height: 96vh;
+    border-radius: 22px;
+  }
+
+  .single-title {
+    font-size: 2.1rem;
+  }
+
+  .polaroid-1 {
+    top: 14px;
+    left: 12px;
+    width: 105px;
+    padding: 6px 6px 18px 6px;
+  }
+
+  .polaroid-1 .polaroid-caption {
+    font-size: 0.95rem;
+  }
+
+  .polaroid-2 {
+    bottom: 85px;
+    right: 12px;
+    width: 100px;
+    padding: 6px 6px 18px 6px;
+  }
+
+  .polaroid-2 .polaroid-caption {
+    font-size: 0.95rem;
+  }
+
+  .sticker-dnd {
+    top: 16px;
+    right: 14px;
+  }
+
+  .sticker-text {
+    font-size: 1.3rem;
+  }
+
+  .postit-blue {
+    bottom: 24px;
+    left: 12px;
+    width: 155px;
+    padding: 14px 10px 14px 10px;
+  }
+
+  .postit-text {
+    font-size: 0.84rem;
+  }
+
+  .presave-main-btn {
+    padding: 13px 26px;
+    font-size: 0.88rem;
+  }
+
+  .floating-controls {
+    bottom: 14px;
+    right: 14px;
+  }
+
+  .tool-btn {
+    width: 38px;
+    height: 38px;
+  }
+}

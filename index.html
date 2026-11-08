@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>DND — J'ai changé ? | Pre-save</title>
+  
+  <!-- Google Fonts: Handwritten & Modern Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Gloria+Hallelujah&family=Outfit:wght@300;400;600;800;900&family=Permanent+Marker&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Room Background with Moody Lighting -->
+  <div class="room-ambient">
+    <div class="spotlight"></div>
+    <div class="neon-reflection"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <main class="scene-container">
+    <!-- The Mirror Container -->
+    <div class="mirror-frame" id="mirrorFrame">
+      
+      <!-- Ambient Rim Lights on the Mirror Edge -->
+      <div class="mirror-rim-light"></div>
+      
+      <!-- Layer 1: Behind the Steam (The Mirror Reflection & Secret Pre-Save Reveal) -->
+      <div class="mirror-reflection-layer" id="revealLayer">
+        <!-- Deep moody reflection silhouette -->
+        <div class="mirror-depth-shadow"></div>
+        
+        <!-- The Revealed Single Artwork & Pre-save Card -->
+        <div class="single-reveal-content">
+          <div class="artist-badge">DND</div>
+          
+          <h1 class="single-title">J'AI CHANGÉ ?</h1>
+          <p class="single-subtitle">NOUVEAU SINGLE &bull; PROCHAINEMENT</p>
+          
+          <!-- Audio wave or visual vibe indicator -->
+          <div class="audio-visualizer" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+
+          <!-- Pre-save CTA Section -->
+          <div class="presave-action-box">
+            <button class="presave-main-btn" id="openPresaveBtn" aria-label="Pré-sauvegarder le single">
+              <svg class="icon-save" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+              </svg>
+              <span>PRÉ-SAUVEGARDER</span>
+            </button>
+            <p class="presave-hint">Sois le premier à l'écouter dès sa sortie</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layer 2: Interactive Fog Canvas (Drawn over the reflection) -->
+      <canvas id="fogCanvas" class="fog-canvas"></canvas>
+
+      <!-- Layer 3: Mirror Surface Stickers, Polaroids & Post-It (Stuck onto the glass) -->
+      <div class="mirror-decorations">
+        
+        <!-- Polaroid 1 (Top Left) -->
+        <div class="polaroid polaroid-1" id="polaroid1" title="DND">
+          <div class="tape-strip top-tape"></div>
+          <div class="polaroid-inner">
+            <div class="polaroid-photo-wrapper">
+              <img src="assets/images/dnd.jpg" alt="Photo polaroid DND" class="polaroid-img duo-left">
+            </div>
+            <div class="polaroid-caption">dnd sessions '24</div>
+          </div>
+        </div>
+
+        <!-- Polaroid 2 (Bottom Right / Side) -->
+        <div class="polaroid polaroid-2" id="polaroid2" title="DND">
+          <div class="tape-strip diagonal-tape"></div>
+          <div class="polaroid-inner">
+            <div class="polaroid-photo-wrapper">
+              <img src="assets/images/dnd.jpg" alt="Photo polaroid DND studio" class="polaroid-img duo-right">
+            </div>
+            <div class="polaroid-caption">dnd 🪞</div>
+          </div>
+        </div>
+
+        <!-- Handwritten "dnd" Sticker (Top Right edge) -->
+        <div class="sticker-dnd" id="stickerDnd" title="Sticker dnd">
+          <div class="sticker-cutout">
+            <span class="sticker-text">dnd</span>
+          </div>
+        </div>
+
+        <!-- Blue Post-It Note (Bottom Left / Center) -->
+        <div class="postit-blue" id="postitBlue">
+          <div class="postit-pin"></div>
+          <div class="postit-content">
+            <p class="postit-text">et toi, tu vois quoi quand tu te regardes dans le miroir ?</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Layer 4: Interactive Finger / Wipe Invitation Prompt -->
+      <div class="wipe-prompt" id="wipePrompt">
+        <div class="hand-icon-wrapper">
+          <svg class="hand-swipe-svg" viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
+            <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
+            <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
+            <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>
+          </svg>
+          <div class="ripple-wave"></div>
+        </div>
+        <p class="wipe-label">Désembue le miroir avec ton doigt</p>
+      </div>
+
+      <!-- Water condensation drips on the edges of the mirror -->
+      <div class="water-drips-overlay" aria-hidden="true"></div>
+
+    </div>
+
+    <!-- Quick Floating Controls (Sound toggle, Re-fog, Reveal all) -->
+    <div class="floating-controls">
+      <button class="tool-btn" id="audioToggleBtn" title="Effet sonore" aria-label="Activer ou désactiver le son">
+        <svg class="icon-sound-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </button>
+      <button class="tool-btn" id="refogBtn" title="Réembuer le miroir" aria-label="Réembuer le miroir">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      </button>
+      <button class="tool-btn" id="cleanAllBtn" title="Tout nettoyer" aria-label="Désembuer tout le miroir">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M12 2v20"/></svg>
+      </button>
+    </div>
+  </main>
+
+  <!-- Pre-Save Platforms Modal -->
+  <div class="modal-backdrop" id="presaveModal" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="closeModalBtn" aria-label="Fermer">&times;</button>
+      
+      <div class="modal-header">
+        <div class="modal-cover-thumb">
+          <img src="assets/images/dnd.jpg" alt="DND">
+        </div>
+        <div>
+          <span class="modal-tag">PRÉ-SAUVEGARDE</span>
+          <h2 class="modal-title">J'AI CHANGÉ ?</h2>
+          <p class="modal-artist">DND</p>
+        </div>
+      </div>
+
+      <p class="modal-desc">Choisis ta plateforme préférée pour pré-sauvegarder le single :</p>
+
+      <div class="platform-list">
+        <!-- Spotify -->
+        <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="platform-item spotify">
+          <div class="platform-info">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#1DB954"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.5 17.3c-.2.3-.6.4-.9.2-2.5-1.5-5.6-1.9-9.3-1-.4.1-.7-.2-.8-.5-.1-.4.2-.7.5-.8 4.1-1 7.6-.5 10.3 1.1.3.3.4.7.2 1zm1.5-3.3c-.3.4-.8.5-1.2.3-3-1.8-7.5-2.4-11-1.3-.5.1-.9-.2-1-.6-.1-.5.2-.9.6-1 4.1-1.2 9.1-.6 12.4 1.5.5.2.6.7.2 1.1zm.1-3.4c-3.6-2.1-9.5-2.3-13-1.2-.6.2-1.2-.1-1.3-.7-.2-.6.1-1.2.7-1.3 4.1-1.2 10.6-1 14.8 1.5.5.3.7 1 .4 1.5-.3.5-1 .7-1.6.2z"/></svg>
+            <span>Spotify</span>
+          </div>
+          <span class="btn-action">Pre-save</span>
+        </a>
+
+        <!-- Apple Music -->
+        <a href="https://music.apple.com" target="_blank" rel="noopener noreferrer" class="platform-item apple">
+          <div class="platform-info">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#FA243C"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.77 1.06-1.85.94-2.93-.91.04-2.02.61-2.67 1.37-.58.67-1.09 1.77-.95 2.82 1.02.08 2.05-.51 2.68-1.26z"/></svg>
+            <span>Apple Music</span>
+          </div>
+          <span class="btn-action">Pre-add</span>
+        </a>
+
+        <!-- Deezer -->
+        <a href="https://deezer.com" target="_blank" rel="noopener noreferrer" class="platform-item deezer">
+          <div class="platform-info">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#A238FF"><path d="M6.06 14.88H2.47v3.59h3.59v-3.59zm5.53 0H8V18.47h3.59v-3.59zm-5.53-5.53H2.47v3.59h3.59V9.35zm5.53 0H8v3.59h3.59V9.35zm5.53 0h-3.59v3.59h3.59V9.35zm5.53 0h-3.59v3.59h3.59V9.35zm0 5.53h-3.59v3.59h3.59v-3.59zm-5.53 0h-3.59v3.59h3.59v-3.59zM17.12 3.82h-3.59v3.59h3.59V3.82zm5.53 0h-3.59v3.59h3.59V3.82z"/></svg>
+            <span>Deezer</span>
+          </div>
+          <span class="btn-action">Pre-save</span>
+        </a>
+
+        <!-- YouTube Music -->
+        <a href="https://music.youtube.com" target="_blank" rel="noopener noreferrer" class="platform-item ytmusic">
+          <div class="platform-info">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="#FF0000"><path d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm0 19c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zm-2-10.5v7l6-3.5-6-3.5z"/></svg>
+            <span>YouTube Music</span>
+          </div>
+          <span class="btn-action">S'abonner</span>
+        </a>
+      </div>
+
+      <div class="modal-footer">
+        <span>&copy; 2024 DND &bull; Tous droits réservés</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
